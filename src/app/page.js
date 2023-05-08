@@ -67,21 +67,21 @@ function buillAllChordsNotation({simpleMode}) {
   const notes = {
     AFlat: 'A♭',
     A: 'A',
-    ASharp: 'A#',
+    ASharp: 'A♯',
     BFlat: 'B♭',
     B: 'B',
     C: 'C',
-    CSharp: 'C#',
+    CSharp: 'C♯',
     DFlat: 'D♭',
     D: 'D',
-    DSharp: 'D#',
+    DSharp: 'D♯',
     EFlat: 'E♭',
     E: 'E',
     F: 'F',
-    FSharp: 'F#',
+    FSharp: 'F♯',
     GFlat: 'G♭',
     G: 'G',
-    GSharp: 'G#',
+    GSharp: 'G♯',
   };
 
   const academicQualities = ['maj', 'min', 'aug', 'dim']
