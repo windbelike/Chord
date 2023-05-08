@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 
 
 export default function Home() {
-  const [chord, setChord] = useState('No Chord')
+  const [chord, setChord] = useState('Cmaj')
   const [speed, setSpeed] = useState(1) // speed by seconds
   const [simpleMode, setSimpleMode] = useState(false) // mode status
   let modeName = simpleMode ? 'Simple Notation' : 'Academic Notation'
@@ -35,7 +35,7 @@ export default function Home() {
     <div className='' >
       <div className='h-screen w-screen flex flex-col justify-center items-center'>
         <div className='flex'>
-          <div className='text-9xl'>
+          <div className='text-7xl lg:text-9xl'>
             {chord}
           </div>
         </div>
