@@ -61,8 +61,9 @@ function getRandomChord({simpleMode}) {
 }
 function buillAllChordsNotation({simpleMode}) {
   console.log("buillAllChordsNotation simpleMode:" + simpleMode)
-  // const parseChord = chordParserFactory();
-  // const renderChord = chordRendererFactory({ useShortNamings: false });
+  const parseChord = chordParserFactory();
+  const renderChord = chordRendererFactory({ useShortNamings: true });
+  console.log(renderChord(parseChord("Dbdim")))
     
   const notes = {
     AFlat: 'A♭',
@@ -85,7 +86,7 @@ function buillAllChordsNotation({simpleMode}) {
   };
 
   const academicQualities = ['maj', 'min', 'aug', 'dim']
-  const simpleQualities = ['', 'm', '+', 'dim']
+  const simpleQualities = ['', '-', '+', '°']
   const qualities = simpleMode ? simpleQualities : academicQualities
   let chordNotations = [];
 
