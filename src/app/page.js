@@ -48,6 +48,7 @@ export default function Home () {
         <div className='flex relative w-[400px] h-[170px]'>
           {
             chordQueue.map((chordWithState, index) => {
+              const translateStr = chordWithState.showen ? '400px -400px' : '0px 0px'
               return (
                 <div key={index} className='rounded-lg text-center text-7xl lg:text-9xl absolute bg-white border-2 border-black
                 w-[400px] h-[160px] p-2
@@ -55,8 +56,8 @@ export default function Home () {
                   left: `${index * 5}px`,
                   bottom: `${index * 5}px`,
                   opacity: chordWithState.showen ? 0 : 1,
-                  transitionDuration: '500ms',
-                  translate: chordWithState.showen ? '500px' : '0px'
+                  transitionDuration: '400ms',
+                  translate: translateStr
                 }}>
                   {chordWithState.chord}
                 </div>
