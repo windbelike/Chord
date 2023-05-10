@@ -11,7 +11,8 @@ export default function Home () {
   const [speed, setSpeed] = useState(1) // speed by seconds
   const [simpleMode, setSimpleMode] = useState(false) // mode status
   const modeName = simpleMode ? 'Simple Notation' : 'Academic Notation'
-  const [chordQueue, setChordQueue] = useState(['Cmaj'])
+  const [chordQueue, setChordQueue] = useState([])
+  console.log('Home rendering, chordQueue: ' + chordQueue)
 
   useEffect(() => {
     let safeSpeed = speed
@@ -19,10 +20,20 @@ export default function Home () {
       safeSpeed = 1
     }
     const interval = setInterval(() => {
-      setChord(getRandomChord({ simpleMode }))
+      // const randomChord = getRandomChord({ simpleMode })
+      // setChord(randomChord)
+      // dequeue
+      // const head = chordQueue.shift()
+      // console.log('queue head: ' + head)
+      makeNextChordAsShowen(chordQueue)
+      if (checkIfAllChordsIsShowen(chordQueue)) {
+        setChordQueue(getTenRamdonChordsWithState({ simpleMode }))
+      } else {
+        setChordQueue([...chordQueue])
+      }
     }, safeSpeed * 1000)
     return () => clearInterval(interval)
-  }, [speed, simpleMode])
+  }, [speed, simpleMode, chordQueue])
 
   function onSpeedChange (e) {
     if (isNaN(e.target.value)) {
@@ -34,10 +45,24 @@ export default function Home () {
   return (
     <div className='' >
       <div className='h-screen w-screen flex flex-col justify-center items-center'>
-        <div className='flex'>
-          <div className='text-7xl lg:text-9xl'>
-            {chord}
-          </div>
+        <div className='flex relative w-[400px] h-[170px]'>
+          {
+            chordQueue.map((chordWithState, index) => {
+              return (
+                <div key={index} className='rounded-lg text-center text-7xl lg:text-9xl absolute bg-white border-2 border-black
+                w-[400px] h-[160px] p-2
+                ' style={{
+                  left: `${index * 5}px`,
+                  bottom: `${index * 5}px`,
+                  opacity: chordWithState.showen ? 0 : 1,
+                  transitionDuration: '500ms',
+                  translate: chordWithState.showen ? '500px' : '0px'
+                }}>
+                  {chordWithState.chord}
+                </div>
+              )
+            })
+          }
         </div>
         <div className='flex items-center m-3'>
           <span>Speed:&nbsp;</span>
@@ -49,6 +74,35 @@ export default function Home () {
   )
 }
 
+function makeNextChordAsShowen (chordList) {
+  for (let i = chordList.length - 1; i >= 0; i--) {
+    if (!chordList[i].showen) {
+      chordList[i].showen = true
+      return
+    }
+  }
+}
+
+function checkIfAllChordsIsShowen (chordList) {
+  for (let i = 0; i < chordList.length; i++) {
+    if (!chordList[i].showen) {
+      return false
+    }
+  }
+  return true
+}
+
+function getTenRamdonChordsWithState ({ simpleMode }) {
+  const result = []
+  for (let i = 0; i < 10; i++) {
+    result.push({
+      chord: getRandomChord({ simpleMode }),
+      showen: false
+    })
+  }
+  return result
+}
+
 // get a random chord
 function getRandomChord ({ simpleMode }) {
   // console.log("getRandomChord simpleMode:"+ simpleMode)
@@ -57,6 +111,7 @@ function getRandomChord ({ simpleMode }) {
   const randomIndex = Math.floor(Math.random() * chordNotations.length)
   return chordNotations[randomIndex]
 }
+
 function buillAllChordsNotation ({ simpleMode }) {
   // console.log("buillAllChordsNotation simpleMode:" + simpleMode)
   // const parseChord = chordParserFactory();
