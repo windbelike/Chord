@@ -46,7 +46,7 @@ export default function Home () {
     <div className='' >
       {/* todo adapting to mobile device */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
-        <div className='flex relative w-[400px] h-[170px] -translate-x-5'>
+        <div className='flex relative w-[400px] h-[170px] max-sm:scale-75'>
           {
             chordQueue.map((chordWithState, index) => {
               const translateStr = chordWithState.showen ? '200px -200px' : '0px 0px'
