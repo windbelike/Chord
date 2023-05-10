@@ -1,17 +1,17 @@
-"use client"
+'use client'
 import {
-	chordParserFactory,
-	chordRendererFactory,
-} from 'chord-symbol/lib/chord-symbol.js'; // bundled version
-import { useEffect, useRef, useState } from 'react';
+  chordParserFactory,
+  chordRendererFactory
+} from 'chord-symbol/lib/chord-symbol.js' // bundled version
+import { useEffect, useRef, useState } from 'react'
+import { allNotes } from './notes'
 
-
-
-export default function Home() {
+export default function Home () {
   const [chord, setChord] = useState('Cmaj')
   const [speed, setSpeed] = useState(1) // speed by seconds
   const [simpleMode, setSimpleMode] = useState(false) // mode status
-  let modeName = simpleMode ? 'Simple Notation' : 'Academic Notation'
+  const modeName = simpleMode ? 'Simple Notation' : 'Academic Notation'
+  const [chordQueue, setChordQueue] = useState(['Cmaj'])
 
   useEffect(() => {
     let safeSpeed = speed
@@ -19,12 +19,12 @@ export default function Home() {
       safeSpeed = 1
     }
     const interval = setInterval(() => {
-      setChord(getRandomChord({simpleMode: simpleMode}))
-    }, safeSpeed * 1000);
+      setChord(getRandomChord({ simpleMode }))
+    }, safeSpeed * 1000)
     return () => clearInterval(interval)
   }, [speed, simpleMode])
 
-  function onSpeedChange(e) {
+  function onSpeedChange (e) {
     if (isNaN(e.target.value)) {
       return
     }
@@ -40,63 +40,41 @@ export default function Home() {
           </div>
         </div>
         <div className='flex items-center m-3'>
-            <span>Speed:&nbsp;</span>
-            <input className='h-9 p-2 border-2' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
-          </div>
-          <button className='bg-black text-white rounded-lg w-48 h-16' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
+          <span>Speed:&nbsp;</span>
+          <input className='h-9 p-2 border-2' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
+        </div>
+        <button className='bg-black text-white rounded-lg w-48 h-16' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
       </div>
     </div>
   )
-
-  
 }
 
 // get a random chord
-function getRandomChord({simpleMode}) {
-  console.log("getRandomChord simpleMode:"+ simpleMode)
-  const chordNotations = buillAllChordsNotation({simpleMode});
+function getRandomChord ({ simpleMode }) {
+  // console.log("getRandomChord simpleMode:"+ simpleMode)
+  const chordNotations = buillAllChordsNotation({ simpleMode })
 
-  let randomIndex = Math.floor(Math.random() * chordNotations.length);
-  return chordNotations[randomIndex];
+  const randomIndex = Math.floor(Math.random() * chordNotations.length)
+  return chordNotations[randomIndex]
 }
-function buillAllChordsNotation({simpleMode}) {
-  console.log("buillAllChordsNotation simpleMode:" + simpleMode)
-  const parseChord = chordParserFactory();
-  const renderChord = chordRendererFactory({ useShortNamings: true });
-  console.log(renderChord(parseChord("Dbdim")))
-    
-  const notes = {
-    AFlat: 'A♭',
-    A: 'A',
-    ASharp: 'A♯',
-    BFlat: 'B♭',
-    B: 'B',
-    C: 'C',
-    CSharp: 'C♯',
-    DFlat: 'D♭',
-    D: 'D',
-    DSharp: 'D♯',
-    EFlat: 'E♭',
-    E: 'E',
-    F: 'F',
-    FSharp: 'F♯',
-    GFlat: 'G♭',
-    G: 'G',
-    GSharp: 'G♯',
-  };
+function buillAllChordsNotation ({ simpleMode }) {
+  // console.log("buillAllChordsNotation simpleMode:" + simpleMode)
+  // const parseChord = chordParserFactory();
+  // const renderChord = chordRendererFactory({ useShortNamings: true });
+  // console.log(renderChord(parseChord("Dbdim")))
 
   const academicQualities = ['maj', 'min', 'aug', 'dim']
   const simpleQualities = ['', '-', '+', '°']
   const qualities = simpleMode ? simpleQualities : academicQualities
-  let chordNotations = [];
+  const chordNotations = []
 
-  for (let note in notes) {
-    for (let quality of qualities) {
-      let n = notes[note];
+  for (const note in allNotes) {
+    for (const quality of qualities) {
+      const n = allNotes[note]
       // const chord = parseChord(`${n}${quality}`);
       // chordNotations.push(renderChord(chord));
       chordNotations.push(`${n}${quality}`)
     }
   }
-  return chordNotations;
+  return chordNotations
 }
