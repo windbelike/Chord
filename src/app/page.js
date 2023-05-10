@@ -12,7 +12,7 @@ export default function Home () {
   const [simpleMode, setSimpleMode] = useState(false) // mode status
   const modeName = simpleMode ? 'Simple Notation' : 'Academic Notation'
   const [chordQueue, setChordQueue] = useState([])
-  console.log('Home rendering, chordQueue: ' + chordQueue)
+  // console.log('Home rendering, chordQueue: ' + chordQueue)
 
   useEffect(() => {
     let safeSpeed = speed
@@ -44,13 +44,14 @@ export default function Home () {
 
   return (
     <div className='' >
-      <div className='h-screen w-screen flex flex-col justify-center items-center'>
-        <div className='flex relative w-[400px] h-[170px]'>
+      {/* todo adapting to mobile device */}
+      <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
+        <div className='flex relative w-[400px] h-[170px] -translate-x-5'>
           {
             chordQueue.map((chordWithState, index) => {
-              const translateStr = chordWithState.showen ? '400px -400px' : '0px 0px'
+              const translateStr = chordWithState.showen ? '200px -200px' : '0px 0px'
               return (
-                <div key={index} className='rounded-lg text-center text-7xl lg:text-9xl absolute bg-white border-2 border-black
+                <div key={index} className='rounded-lg text-center text-9xl absolute bg-white border-2 border-black
                 w-[400px] h-[160px] p-2
                 ' style={{
                   left: `${index * 5}px`,
