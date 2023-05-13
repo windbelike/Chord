@@ -5,12 +5,13 @@ import {
 } from 'chord-symbol/lib/chord-symbol.js' // bundled version
 import { useEffect, useRef, useState } from 'react'
 import { allNotes } from './notes'
+import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons'
 
 export default function Home () {
   const [chord, setChord] = useState('Cmaj')
   const [speed, setSpeed] = useState(1) // speed by seconds
   const [simpleMode, setSimpleMode] = useState(false) // mode status
-  const modeName = simpleMode ? 'Simple Notation' : 'Academic Notation'
+  const modeName = simpleMode ? 'Simple' : 'Academic'
   const [chordQueue, setChordQueue] = useState([])
   // console.log('Home rendering, chordQueue: ' + chordQueue)
 
@@ -52,7 +53,7 @@ export default function Home () {
               const translateStr = chordWithState.showen ? '200px' : '0px'
               return (
                 <div key={index} className='rounded-lg text-center text-9xl absolute bg-white
-                w-[400px] h-[160px] p-2 border-2 border-black
+                w-[400px] h-[160px] p-2 border-2 border-gray-500
                 ' style={{
                   // left: `${index * 5}px`,
                   bottom: `${index * 5}px`,
@@ -66,11 +67,15 @@ export default function Home () {
             })
           }
         </div>
+        <div className='flex mt-5'>
+          <CaretLeftFilled className="hover:cursor-pointer hover:bg-gray-200" style={{ fontSize: '56px' }} />
+          <CaretRightFilled className="hover:cursor-pointer hover:bg-gray-200" style={{ fontSize: '56px' }} />
+        </div>
         <div className='flex items-center m-3'>
           <span>Speed:&nbsp;</span>
           <input className='h-9 p-2 border-2' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
+          <button className='ml-5 bg-black text-white rounded-lg w-28 h-12' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
         </div>
-        <button className='bg-black text-white rounded-lg w-48 h-16' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
       </div>
     </div>
   )
