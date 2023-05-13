@@ -21,11 +21,6 @@ export default function Home () {
       safeSpeed = 1
     }
     const interval = setInterval(() => {
-      // const randomChord = getRandomChord({ simpleMode })
-      // setChord(randomChord)
-      // dequeue
-      // const head = chordQueue.shift()
-      // console.log('queue head: ' + head)
       makeNextChordAsShowen(chordQueue)
       if (checkIfAllChordsIsShowen(chordQueue)) {
         setChordQueue(getTenRamdonChordsWithState({ simpleMode }))
@@ -53,13 +48,12 @@ export default function Home () {
               const translateStr = chordWithState.showen ? '200px' : '0px'
               return (
                 <div key={index} className='rounded-lg text-center text-9xl absolute bg-white
-                w-[400px] h-[160px] p-2 border-2 border-gray-500
+                w-[400px] h-[160px] p-2
                 ' style={{
                   // left: `${index * 5}px`,
-                  bottom: `${index * 5}px`,
-                  opacity: chordWithState.showen ? 0 : 1,
-                  transitionDuration: '400ms',
-                  translate: translateStr
+                  // bottom: `${index * 5}px`,
+                  opacity: chordWithState.showen ? 0 : 1
+                  // translate: translateStr
                 }}>
                   {chordWithState.chord}
                 </div>
