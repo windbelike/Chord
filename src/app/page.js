@@ -13,7 +13,6 @@ export default function Home () {
   const [simpleMode, setSimpleMode] = useState(false) // mode status
   const modeName = simpleMode ? 'Simple' : 'Academic'
   const [chordQueue, setChordQueue] = useState([])
-  // console.log('Home rendering, chordQueue: ' + chordQueue)
 
   useEffect(() => {
     let safeSpeed = speed
@@ -45,7 +44,6 @@ export default function Home () {
         <div className='flex relative w-[400px] h-[170px] max-sm:scale-75'>
           {
             chordQueue.map((chordWithState, index) => {
-              const translateStr = chordWithState.showen ? '200px' : '0px'
               return (
                 <div key={index} className='rounded-lg text-center text-9xl absolute bg-white
                 w-[400px] h-[160px] p-2
@@ -62,8 +60,12 @@ export default function Home () {
           }
         </div>
         <div className='flex mt-5'>
-          <CaretLeftFilled className="hover:cursor-pointer hover:bg-gray-200" style={{ fontSize: '56px' }} />
-          <CaretRightFilled className="hover:cursor-pointer hover:bg-gray-200" style={{ fontSize: '56px' }} />
+          <button>
+            <CaretLeftFilled className="hover:bg-gray-200 rounded-lg" style={{ fontSize: '56px' }} />
+          </button>
+          <button>
+            <CaretRightFilled className=" hover:bg-gray-200 rounded-lg" style={{ fontSize: '56px' }} />
+          </button>
         </div>
         <div className='flex items-center m-3'>
           <span>Speed:&nbsp;</span>
