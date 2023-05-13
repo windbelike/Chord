@@ -1,18 +1,15 @@
 'use client'
-import {
-  chordParserFactory,
-  chordRendererFactory
-} from 'chord-symbol/lib/chord-symbol.js' // bundled version
 import { useEffect, useRef, useState } from 'react'
 import { allNotes } from './notes'
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons'
 
 export default function Home () {
   const [chord, setChord] = useState('Cmaj')
-  const [speed, setSpeed] = useState(1) // speed by seconds
+  const [speed, setSpeed] = useState(2) // speed by seconds
   const [simpleMode, setSimpleMode] = useState(false) // mode status
   const modeName = simpleMode ? 'Simple' : 'Academic'
-  const [chordQueue, setChordQueue] = useState([])
+  const [chordQueue, setChordQueue] = useState(['Cmaj'])
+  console.log('chordQueue:' + JSON.stringify(chordQueue))
 
   useEffect(() => {
     let safeSpeed = speed
@@ -20,12 +17,13 @@ export default function Home () {
       safeSpeed = 1
     }
     const interval = setInterval(() => {
-      makeNextChordAsShowen(chordQueue)
-      if (checkIfAllChordsIsShowen(chordQueue)) {
-        setChordQueue(getTenRamdonChordsWithState({ simpleMode }))
-      } else {
-        setChordQueue([...chordQueue])
+      const currentChord = getRandomChord({ simpleMode })
+      chordQueue.push(currentChord)
+      if (chordQueue.length > 10) {
+        chordQueue.shift()
       }
+      setChord(currentChord)
+      setChordQueue([...chordQueue])
     }, safeSpeed * 1000)
     return () => clearInterval(interval)
   }, [speed, simpleMode, chordQueue])
@@ -41,25 +39,11 @@ export default function Home () {
     <div className='' >
       {/* todo adapting to mobile device */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
-        <div className='flex relative w-[400px] h-[170px] max-sm:scale-75'>
-          {
-            chordQueue.map((chordWithState, index) => {
-              return (
-                <div key={index} className='rounded-lg text-center text-9xl absolute bg-white
-                w-[400px] h-[160px] p-2
-                ' style={{
-                  // left: `${index * 5}px`,
-                  // bottom: `${index * 5}px`,
-                  opacity: chordWithState.showen ? 0 : 1
-                  // translate: translateStr
-                }}>
-                  {chordWithState.chord}
-                </div>
-              )
-            })
-          }
+        <div className='rounded-lg text-center text-9xl bg-white
+                w-[400px] h-[160px] p-2'>
+          {chord}
         </div>
-        <div className='flex mt-5'>
+        <div className='flex mt-8'>
           <button>
             <CaretLeftFilled className="hover:bg-gray-200 rounded-lg" style={{ fontSize: '56px' }} />
           </button>
@@ -75,35 +59,6 @@ export default function Home () {
       </div>
     </div>
   )
-}
-
-function makeNextChordAsShowen (chordList) {
-  for (let i = chordList.length - 1; i >= 0; i--) {
-    if (!chordList[i].showen) {
-      chordList[i].showen = true
-      return
-    }
-  }
-}
-
-function checkIfAllChordsIsShowen (chordList) {
-  for (let i = 0; i < chordList.length; i++) {
-    if (!chordList[i].showen) {
-      return false
-    }
-  }
-  return true
-}
-
-function getTenRamdonChordsWithState ({ simpleMode }) {
-  const result = []
-  for (let i = 0; i < 10; i++) {
-    result.push({
-      chord: getRandomChord({ simpleMode }),
-      showen: false
-    })
-  }
-  return result
 }
 
 // get a random chord
