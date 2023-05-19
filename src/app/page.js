@@ -65,7 +65,7 @@ export default function Home () {
           <span>Speed:&nbsp;</span>
           <input className='h-9 p-2 border-2 bg-slate-200' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
         </div>
-        <button className='mt-10 text-white bg-black rounded-lg w-28 h-10' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
+        <button className='mt-10 text-white bg-black rounded-lg w-28 h-14' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
       </div>
     </div>
   )
