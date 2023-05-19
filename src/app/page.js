@@ -44,14 +44,9 @@ export default function Home () {
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
-        <div className='rounded-lg text-center text-7xl
+        <div className='rounded-lg text-center text-9xl
                 w-[400px] h-[160px]'>
           {chord}
-        </div>
-        <div className='flex'>
-          <div className='text-7xl lg:text-9xl'>
-            {chord}
-          </div>
         </div>
         {/* Timemachine button */}
         <div className='flex mt-8 space-x-8' >
