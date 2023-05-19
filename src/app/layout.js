@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 /**
  *  `cyrillic`, `cyrillic-ext`, `greek`, `greek-ext`, `latin`, `latin-ext`, `vietnamese`
  */
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['greek'] })
 
 export const metadata = {
   title: 'Chord Reaction Training',
