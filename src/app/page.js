@@ -40,11 +40,11 @@ export default function Home () {
   }
 
   return (
-    <div className='' >
+    <div className='bg-slate-200' >
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
-        <div className='rounded-lg text-center text-9xl bg-white
+        <div className='rounded-lg text-center text-9xl
                 w-[400px] h-[160px] p-2'>
           {chord}
         </div>
@@ -63,9 +63,9 @@ export default function Home () {
         {/* Functional button */}
         <div className='flex items-center mt-10'>
           <span>Speed:&nbsp;</span>
-          <input className='h-9 p-2 border-2' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
+          <input className='h-9 p-2 border-2 bg-slate-200' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
         </div>
-        <button className='mt-10 bg-black text-white rounded-lg w-28 h-10' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
+        <button className='mt-10 text-white bg-black rounded-lg w-28 h-10' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
       </div>
     </div>
   )
