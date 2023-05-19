@@ -48,6 +48,11 @@ export default function Home () {
                 w-[400px] h-[160px]'>
           {chord}
         </div>
+        <div className='flex'>
+          <div className='text-7xl lg:text-9xl'>
+            {chord}
+          </div>
+        </div>
         {/* Timemachine button */}
         <div className='flex mt-8 space-x-8' >
           <button onClick={onClickLeft} className='hover:bg-gray-200 rounded-lg active:bg-gray-300'>
