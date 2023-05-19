@@ -46,6 +46,24 @@ export default function Home () {
       <div className='rounded-lg text-3xl'>
         {chord}
       </div>
+      <div className='rounded-lg text-4xl'>
+        {chord}
+      </div>
+      <div className='rounded-lg text-5xl'>
+        {chord}
+      </div>
+      <div className='rounded-lg text-6xl'>
+        {chord}
+      </div>
+      <div className='rounded-lg text-7xl'>
+        {chord}
+      </div>
+      <div className='rounded-lg text-8xl'>
+        {chord}
+      </div>
+      <div className='rounded-lg text-9xl'>
+        {chord}
+      </div>
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
         <div className='rounded-lg text-9xl'>
           {chord}
