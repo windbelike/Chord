@@ -44,7 +44,7 @@ export default function Home () {
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
-        <div className='rounded-lg text-center text-9xl
+        <div className='rounded-lg text-center text-7xl
                 w-[400px] h-[160px]'>
           {chord}
         </div>
