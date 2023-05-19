@@ -51,13 +51,13 @@ export default function Home () {
         {/* Timemachine button */}
         <div className='flex mt-8 space-x-8' >
           <button onClick={onClickLeft} className='hover:bg-gray-200 rounded-lg active:bg-gray-300'>
-            <AiFillCaretLeft style={{ fontSize: '56px' }} />
+            <AiFillCaretLeft style={{ fontSize: '90px' }} />
           </button>
           <button onClick={onClickPause} className=''>
-            {pause ? <AiOutlinePlayCircle style={{ fontSize: '56px' }} /> : <AiOutlinePause style={{ fontSize: '56px' }} />}
+            {pause ? <AiOutlinePlayCircle style={{ fontSize: '90px' }} /> : <AiOutlinePause style={{ fontSize: '90px' }} />}
           </button>
           <button onClick={onClickRight} className='hover:bg-gray-200 rounded-lg active:bg-gray-300'>
-            <AiFillCaretRight style={{ fontSize: '56px' }} />
+            <AiFillCaretRight style={{ fontSize: '90px' }} />
           </button>
         </div>
         {/* Functional button */}
@@ -65,7 +65,7 @@ export default function Home () {
           <span>Speed:&nbsp;</span>
           <input className='h-9 p-2 border-2' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
         </div>
-        <button className='mt-10 ml-5 bg-black text-white rounded-lg w-28 h-10' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
+        <button className='mt-10 bg-black text-white rounded-lg w-28 h-10' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
       </div>
     </div>
   )
@@ -107,6 +107,7 @@ function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause
     if (isInTimemachineState(safeChordIndex, chordQueue)) {
       return
     }
+    // normal chord carousel state
     if (speed < minSpeedSec) {
       speed = safeSpeedSec
     }
