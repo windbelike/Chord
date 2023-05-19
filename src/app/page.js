@@ -61,7 +61,7 @@ export default function Home () {
           </button>
         </div>
         {/* Functional button */}
-        <div className='flex items-center mt-10'>
+        <div className='flex items-center mt-10 font-bold'>
           <span>Speed:&nbsp;</span>
           <input className='h-9 p-2 border-2 bg-slate-200' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
         </div>
