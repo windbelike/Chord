@@ -3,30 +3,19 @@ import { useEffect, useRef, useState } from 'react'
 import { allNotes } from './notes'
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons'
 
+const chordQueueMaxLen = 10
+const minSpeedSec = 0.1
+const maxSpeedSec = 10000
+const safeSpeedSec = 1
+const defaultChord = 'Cmaj'
+
 export default function Home () {
-  const [chord, setChord] = useState('Cmaj')
   const [speed, setSpeed] = useState(2) // speed by seconds
   const [simpleMode, setSimpleMode] = useState(false) // mode status
+  const [currChordIndex, setCurrChordIndex] = useState(0) // current chord index
   const modeName = simpleMode ? 'Simple' : 'Academic'
-  const [chordQueue, setChordQueue] = useState(['Cmaj'])
-  console.log('chordQueue:' + JSON.stringify(chordQueue))
 
-  useEffect(() => {
-    let safeSpeed = speed
-    if (safeSpeed < 0.1) {
-      safeSpeed = 1
-    }
-    const interval = setInterval(() => {
-      const currentChord = getRandomChord({ simpleMode })
-      chordQueue.push(currentChord)
-      if (chordQueue.length > 10) {
-        chordQueue.shift()
-      }
-      setChord(currentChord)
-      setChordQueue([...chordQueue])
-    }, safeSpeed * 1000)
-    return () => clearInterval(interval)
-  }, [speed, simpleMode, chordQueue])
+  const chord = useChord(speed, simpleMode, currChordIndex, setCurrChordIndex)
 
   function onSpeedChange (e) {
     if (isNaN(e.target.value)) {
@@ -35,35 +24,87 @@ export default function Home () {
     setSpeed(e.target.value)
   }
 
+  function onClickLeft () {
+    setCurrChordIndex(currChordIndex - 1)
+  }
+
+  function onClickRight () {
+    setCurrChordIndex(currChordIndex + 1)
+  }
+
   return (
     <div className='' >
       {/* todo adapting to mobile device */}
+      {/* Chord screen */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
         <div className='rounded-lg text-center text-9xl bg-white
                 w-[400px] h-[160px] p-2'>
           {chord}
         </div>
-        <div className='flex mt-8'>
-          <button>
-            <CaretLeftFilled className="hover:bg-gray-200 rounded-lg" style={{ fontSize: '56px' }} />
+        {/* Timemachine button */}
+        <div className='flex mt-8 space-x-8' >
+          <button onClick={onClickLeft} className='hover:bg-gray-200 rounded-lg active:bg-gray-300'>
+            <CaretLeftFilled style={{ fontSize: '56px' }} />
           </button>
-          <button>
-            <CaretRightFilled className=" hover:bg-gray-200 rounded-lg" style={{ fontSize: '56px' }} />
+          <button onClick={onClickRight} className='hover:bg-gray-200 rounded-lg active:bg-gray-300'>
+            <CaretRightFilled style={{ fontSize: '56px' }} />
           </button>
         </div>
+        {/* Functional button */}
         <div className='flex items-center m-3'>
           <span>Speed:&nbsp;</span>
           <input className='h-9 p-2 border-2' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
-          <button className='ml-5 bg-black text-white rounded-lg w-28 h-12' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
+          <button className='ml-5 bg-black text-white rounded-lg w-28 h-10' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
         </div>
       </div>
     </div>
   )
 }
 
+function useChord (speed, simpleMode, currChordIndex, setCurrChordIndex) {
+  const [chordQueue, setChordQueue] = useState([defaultChord])
+  console.log('chordQueue', JSON.stringify(chordQueue))
+  let safeChordIndex = currChordIndex
+  if (currChordIndex >= chordQueue.length) {
+    safeChordIndex = chordQueue.length - 1
+  } else if (currChordIndex < 0) {
+    safeChordIndex = 0
+  }
+  console.log('safeChordIndex:', safeChordIndex)
+  console.log('currChordIndex:', currChordIndex)
+
+  useEffect(() => {
+    setCurrChordIndex(safeChordIndex)
+  }, [currChordIndex])
+
+  useEffect(() => {
+    if (speed < minSpeedSec) {
+      speed = safeSpeedSec
+    }
+    if (speed >= maxSpeedSec) {
+      speed = maxSpeedSec
+    }
+    // if safeChordIndex is on timemachine state, no interval
+    if (safeChordIndex != chordQueue.length - 1) {
+      return
+    }
+    const interval = setInterval(() => {
+      const currentChord = getRandomChord({ simpleMode })
+      chordQueue.push(currentChord)
+      if (chordQueue.length > chordQueueMaxLen) {
+        chordQueue.shift()
+      }
+      setChordQueue([...chordQueue])
+      setCurrChordIndex(chordQueue.length - 1)
+    }, speed * 1000)
+    return () => clearInterval(interval)
+  }, [speed, simpleMode, chordQueue, safeChordIndex])
+
+  return chordQueue[safeChordIndex]
+}
+
 // get a random chord
 function getRandomChord ({ simpleMode }) {
-  // console.log("getRandomChord simpleMode:"+ simpleMode)
   const chordNotations = buillAllChordsNotation({ simpleMode })
 
   const randomIndex = Math.floor(Math.random() * chordNotations.length)
@@ -71,11 +112,6 @@ function getRandomChord ({ simpleMode }) {
 }
 
 function buillAllChordsNotation ({ simpleMode }) {
-  // console.log("buillAllChordsNotation simpleMode:" + simpleMode)
-  // const parseChord = chordParserFactory();
-  // const renderChord = chordRendererFactory({ useShortNamings: true });
-  // console.log(renderChord(parseChord("Dbdim")))
-
   const academicQualities = ['maj', 'min', 'aug', 'dim']
   const simpleQualities = ['', '-', '+', '°']
   const qualities = simpleMode ? simpleQualities : academicQualities
