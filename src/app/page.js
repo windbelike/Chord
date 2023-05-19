@@ -43,6 +43,9 @@ export default function Home () {
     <div className='bg-slate-200' >
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
+      <div className='rounded-lg text-3xl'>
+        {chord}
+      </div>
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
         <div className='rounded-lg text-9xl'>
           {chord}
@@ -60,7 +63,7 @@ export default function Home () {
           </button>
         </div>
         {/* Functional button */}
-        <div className='flex items-center mt-10'>
+        <div className='flex items-center mt-10 font-bold'>
           <span>Speed:&nbsp;</span>
           <input className='h-9 p-2 border-2 bg-slate-200' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
         </div>
