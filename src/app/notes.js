@@ -47,5 +47,13 @@ export const allNotes = {
   ...gNotes
 }
 
+// all scales
+export const cMajorScale = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+export const gMajorScale = ['G', 'A', 'B', 'C', 'D', 'E', 'F♯']
+
+export const rootsSelection = {
+  CMajorRoots: cMajorScale
+}
+
 export const academicQualities = ['maj', 'min', 'aug', 'dim']
 export const simpleQualities = ['', '-', '+', '°']

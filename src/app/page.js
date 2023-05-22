@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { allNotes } from './notes'
+import { allNotes, rootsSelection } from './notes'
 import { AiFillCaretLeft, AiFillCaretRight, AiOutlinePause, AiOutlinePlayCircle } from 'react-icons/ai'
 
 const chordQueueMaxLen = 10
@@ -16,8 +16,10 @@ export default function Home () {
   const [pause, setPause] = useState(false) // pause status
   const [chordQueue, setChordQueue] = useState([defaultChord])
   const modeName = simpleMode ? 'Simple' : 'Academic'
+  const [allRootsMode, setAllRootsMode] = useState(true)
+  const roots = allRootsMode ? 'AllRoots' : 'CMajorRoots'
 
-  const chord = useChord({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue })
+  const chord = useChord({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue, roots })
 
   function isLeftDisabled () {
     return currChordIndex <= 0
@@ -51,8 +53,25 @@ export default function Home () {
     setCurrChordIndex(currChordIndex + 1)
   }
 
+  // function openRootDialog () {
+  //   const dialog = document.querySelector('#rootDialog')
+  //   dialog.showModal()
+  //   // close when clicking else where
+  //   dialog.addEventListener('click', e => {
+  //     const dialogDimensions = dialog.getBoundingClientRect()
+  //     if (
+  //       e.clientX < dialogDimensions.left ||
+  //       e.clientX > dialogDimensions.right ||
+  //       e.clientY < dialogDimensions.top ||
+  //       e.clientY > dialogDimensions.bottom
+  //     ) {
+  //       dialog.close()
+  //     }
+  //   })
+  // }
+
   return (
-    <div className='bg-slate-200' >
+    <div className='bg-stone-500' >
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
@@ -75,9 +94,19 @@ export default function Home () {
         {/* Functional button */}
         <div className='flex items-center mt-10 font-bold'>
           <span>Speed:&nbsp;</span>
-          <input className='h-9 p-2 border-2 bg-slate-200' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
+          <input className='rounded-lg h-9 p-2 border-2 bg-slate-200' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
         </div>
-        <button className='mt-10 text-white bg-black rounded-lg w-28 h-14' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
+        <div className='mt-10 flex space-x-3'>
+          <button className=' text-white bg-black rounded-lg w-28 h-14' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
+          <button className=' text-white bg-black rounded-lg w-28 h-14' onClick={() => setAllRootsMode(!allRootsMode)}>{roots}</button>
+        </div>
+        {/* <dialog id="rootDialog" className='p-0 w-64 rounded-lg'>
+          <div className=' bg-stone-600 flex flex-col h-full p-4 space-y-5'>
+            <button className='text-xl font-bold hover:bg-slate-200'>All</button>
+            <button className='text-xl font-bold'>Root In C Major Scale</button>
+            <button className='text-xl font-bold'>Root In G Major Scale</button>
+          </div>
+        </dialog> */}
       </div>
     </div>
   )
@@ -88,7 +117,7 @@ function isInTimemachineState (currChordIndex, chordQueue) {
   return currChordIndex < chordQueue.length - 1
 }
 
-function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue }) {
+function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue, roots }) {
   let safeChordIndex = currChordIndex
   if (currChordIndex >= chordQueue.length) {
     safeChordIndex = chordQueue.length - 1
@@ -124,7 +153,7 @@ function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause
       speed = maxSpeedSec
     }
     const interval = setInterval(() => {
-      const currentChord = getRandomChord({ simpleMode })
+      const currentChord = getRandomChord({ simpleMode, roots })
       chordQueue.push(currentChord)
       if (chordQueue.length > chordQueueMaxLen) {
         chordQueue.shift()
@@ -139,22 +168,28 @@ function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause
 }
 
 // get a random chord
-function getRandomChord ({ simpleMode }) {
-  const chordNotations = buillAllChordsNotation({ simpleMode })
+function getRandomChord ({ simpleMode, roots }) {
+  const chordNotations = buillAllChordsNotation({ simpleMode, roots })
 
   const randomIndex = Math.floor(Math.random() * chordNotations.length)
   return chordNotations[randomIndex]
 }
 
-function buillAllChordsNotation ({ simpleMode }) {
-  const academicQualities = ['maj', 'min', 'aug', 'dim']
-  const simpleQualities = ['', '-', '+', '°']
+const academicQualities = ['maj', 'min', 'aug', 'dim']
+const simpleQualities = ['', '-', '+', '°']
+
+function buillAllChordsNotation ({ simpleMode, roots }) {
   const qualities = simpleMode ? simpleQualities : academicQualities
   const chordNotations = []
 
-  for (const note in allNotes) {
+  let notes = rootsSelection[roots]
+  if (notes == null) {
+    notes = allNotes
+  }
+
+  for (const note in notes) {
     for (const quality of qualities) {
-      const n = allNotes[note]
+      const n = notes[note]
       // const chord = parseChord(`${n}${quality}`);
       // chordNotations.push(renderChord(chord));
       chordNotations.push(`${n}${quality}`)
