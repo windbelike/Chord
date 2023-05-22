@@ -10,7 +10,7 @@ const safeSpeedSec = 1
 const defaultChord = 'Cmaj'
 
 export default function Home () {
-  const [speed, setSpeed] = useState(2) // speed by seconds
+  const [speed, setSpeed] = useState(1) // speed by seconds
   const [simpleMode, setSimpleMode] = useState(false) // mode status
   const [currChordIndex, setCurrChordIndex] = useState(0) // current chord index
   const [pause, setPause] = useState(false) // pause status
@@ -18,6 +18,18 @@ export default function Home () {
   const modeName = simpleMode ? 'Simple' : 'Academic'
 
   const chord = useChord({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue })
+
+  function isLeftDisabled () {
+    return currChordIndex <= 0
+  }
+
+  function isRightDisabled () {
+    return currChordIndex >= chordQueue.length - 1
+  }
+
+  function buttonDiabledColor (disabled) {
+    return disabled ? 'text-gray-400' : ''
+  }
 
   function onSpeedChange (e) {
     if (isNaN(e.target.value)) {
@@ -50,13 +62,13 @@ export default function Home () {
         </div>
         {/* Timemachine button */}
         <div className='flex mt-8 space-x-8' >
-          <button onClick={onClickLeft} className='hover:bg-gray-200 rounded-lg active:bg-gray-300'>
+          <button disabled={isLeftDisabled()} onClick={onClickLeft} className={' rounded-lg  ' + buttonDiabledColor(isLeftDisabled())}>
             <AiFillCaretLeft style={{ fontSize: '90px' }} />
           </button>
           <button onClick={onClickPause} className=''>
             {pause ? <AiOutlinePlayCircle style={{ fontSize: '90px' }} /> : <AiOutlinePause style={{ fontSize: '90px' }} />}
           </button>
-          <button onClick={onClickRight} className='hover:bg-gray-200 rounded-lg active:bg-gray-300'>
+          <button disabled={isRightDisabled()} onClick={onClickRight} className={' rounded-lg  ' + buttonDiabledColor(isRightDisabled())}>
             <AiFillCaretRight style={{ fontSize: '90px' }} />
           </button>
         </div>
@@ -77,15 +89,12 @@ function isInTimemachineState (currChordIndex, chordQueue) {
 }
 
 function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue }) {
-  console.log('chordQueue', JSON.stringify(chordQueue))
   let safeChordIndex = currChordIndex
   if (currChordIndex >= chordQueue.length) {
     safeChordIndex = chordQueue.length - 1
   } else if (currChordIndex < 0) {
     safeChordIndex = 0
   }
-  console.log('safeChordIndex:', safeChordIndex)
-  console.log('currChordIndex:', currChordIndex)
 
   useEffect(() => {
     setCurrChordIndex(safeChordIndex)
