@@ -102,9 +102,13 @@ export default function ChordDisplay () {
             })}
           </ul>
           }
-          <div className='m-4 w-[400px] text-lg break-words font-bold text-center'>
-            {chordIn != initChordIn && 'Candidates: ' + natualMajorScaleChordOption[chordIn]}
-            {chordIn != initChordIn && '\n Keys: ' + generateMajorScaleKeys(chordIn)}
+          <div className='m-4 w-[400px] text-lg font-bold text-center'>
+            <div>
+              {chordIn != initChordIn && 'Candidates: ' + natualMajorScaleChordOption[chordIn]}
+            </div>
+            <div>
+              {chordIn != initChordIn && 'Keys: ' + generateMajorScaleKeys(chordIn)}
+            </div>
           </div>
         </div>
       </div>
