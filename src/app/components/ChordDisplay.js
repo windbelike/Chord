@@ -60,7 +60,7 @@ export default function ChordDisplay () {
   }
 
   return (
-    <div className='bg-stone-500' >
+    <div className='bg-amber-50' >
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
