@@ -2,24 +2,26 @@
 import { useEffect, useRef, useState } from 'react'
 import { AiFillCaretLeft, AiFillCaretRight, AiOutlinePause, AiOutlinePlayCircle } from 'react-icons/ai'
 import { getRandomChord } from '../utils/chordUtils'
+import { natualMajorScaleChordOption } from '../utils/notes'
 
 const chordQueueMaxLen = 10
 const minSpeedSec = 0.1
 const maxSpeedSec = 10000
 const safeSpeedSec = 1
 const defaultChord = 'Cmaj'
+const initChordIn = 'Any'
 
 export default function ChordDisplay () {
   const [speed, setSpeed] = useState(1) // speed by seconds
-  const [simpleMode, setSimpleMode] = useState(false) // mode status
   const [currChordIndex, setCurrChordIndex] = useState(0) // current chord index
   const [pause, setPause] = useState(false) // pause status
   const [chordQueue, setChordQueue] = useState([defaultChord])
-  const modeName = simpleMode ? 'Simple' : 'Academic'
-  const [allRootsMode, setAllRootsMode] = useState(true)
-  const roots = allRootsMode ? 'AllRoots' : 'CMajorRoots'
+  // chord options
+  const [chordIn, setchordIn] = useState(initChordIn)
+  const [openChordMenu, setOpenChordMenu] = useState(false)
+  const chordOptionList = [initChordIn, ...Object.keys(natualMajorScaleChordOption)]
 
-  const chord = useChord({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue, roots })
+  const chord = useChord({ speed, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue, chordIn })
 
   function isLeftDisabled () {
     return currChordIndex <= 0
@@ -53,12 +55,16 @@ export default function ChordDisplay () {
     setCurrChordIndex(currChordIndex + 1)
   }
 
+  function onClickOpenChordMenu () {
+    setOpenChordMenu(!openChordMenu)
+  }
+
   return (
     <div className='bg-stone-500' >
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
-      <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
-        <div className='rounded-lg text-9xl flex items-center justify-center grow-0
+      <div className='h-screen w-screen flex flex-col justify-center items-center'>
+        <div className='rounded-lg text-9xl flex items-center justify-center
                 w-[400px] h-[200px]'>
           {(chord[1] == '♯' || chord[1] == '♭')
             ? <div>
@@ -86,19 +92,36 @@ export default function ChordDisplay () {
           <span>Speed:&nbsp;</span>
           <input className='rounded-lg h-9 p-2 border-2 bg-slate-200' type="text" id="speed" name="speed" size="4" value={speed} placeholder={speed} onChange={onSpeedChange} />
         </div>
-        <div className='mt-10 flex space-x-3'>
-          <button className=' text-white bg-black rounded-lg w-28 h-14' onClick={() => setSimpleMode(!simpleMode)}>{modeName}</button>
-          <button className=' text-white bg-black rounded-lg w-28 h-14' onClick={() => setAllRootsMode(!allRootsMode)}>{roots}</button>
-        </div>
-        {/* <dialog id="rootDialog" className='p-0 w-64 rounded-lg'>
-          <div className=' bg-stone-600 flex flex-col h-full p-4 space-y-5'>
-            <button className='text-xl font-bold hover:bg-slate-200'>All</button>
-            <button className='text-xl font-bold'>Root In C Major Scale</button>
-            <button className='text-xl font-bold'>Root In G Major Scale</button>
+        {/* Chord Option Munu */}
+        <div className='mt-10 flex flex-col items-center'>
+          <button className='w-[350px] text-xl hover:bg-gray-600 font-thin text-gray-300 bg-black rounded-lg p-2' onClick={onClickOpenChordMenu} >Chords In <span className='text-white font-bold'>{chordIn}</span> {chordIn == initChordIn ? 'Scale' : 'Major Natual Scale'} <span className='font-bold'>∨</span></button>
+          {openChordMenu &&
+          <ul className='w-[350px] rounded-lg bg-black columns-3'>
+            {chordOptionList.map(k => {
+              return <ChordOption key={k} root={k} chordIn={chordIn} setchordIn={setchordIn} setOpenChordMenu={setOpenChordMenu} />
+            })}
+          </ul>
+          }
+          <div className='m-4 w-[400px] text-lg break-words font-bold '>
+            {chordIn != initChordIn && 'Candidates: ' + natualMajorScaleChordOption[chordIn]}
           </div>
-        </dialog> */}
+        </div>
       </div>
     </div>
+  )
+}
+
+function ChordOption ({ chordIn, setchordIn, root, setOpenChordMenu }) {
+  function onClickChordOption () {
+    setchordIn(root)
+    setOpenChordMenu(false)
+  }
+  return (
+    <>
+      <li onClick={onClickChordOption} className={'hover:cursor-pointer text-white text-center text-2xl hover:bg-gray-600 rounded-lg' + (root === chordIn ? ' bg-gray-600' : '')}>
+        {root}
+      </li>
+    </>
   )
 }
 
@@ -107,7 +130,7 @@ function isInTimemachineState (currChordIndex, chordQueue) {
   return currChordIndex < chordQueue.length - 1
 }
 
-function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue, roots }) {
+function useChord ({ speed, currChordIndex, setCurrChordIndex, pause, chordQueue, setChordQueue, chordIn }) {
   let safeChordIndex = currChordIndex
   if (currChordIndex >= chordQueue.length) {
     safeChordIndex = chordQueue.length - 1
@@ -143,7 +166,7 @@ function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause
       speed = maxSpeedSec
     }
     const interval = setInterval(() => {
-      const currentChord = getRandomChord({ simpleMode, roots })
+      const currentChord = getRandomChord({ simpleMode: false, chordIn })
       chordQueue.push(currentChord)
       if (chordQueue.length > chordQueueMaxLen) {
         chordQueue.shift()
@@ -152,7 +175,7 @@ function useChord ({ speed, simpleMode, currChordIndex, setCurrChordIndex, pause
       setCurrChordIndex(chordQueue.length - 1)
     }, speed * 1000)
     return () => clearInterval(interval)
-  }, [speed, simpleMode, chordQueue, safeChordIndex, pause])
+  }, [speed, chordQueue, safeChordIndex, pause])
 
   return chordQueue[safeChordIndex]
 }

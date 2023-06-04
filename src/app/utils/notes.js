@@ -223,11 +223,29 @@ function determineInterval (first, second) {
   return dist
 }
 
-console.log('=-========================')
-for (const i in circleOfTheFifth) {
-  console.log('Key:' + i)
-  console.log(generateMajorScaleChords(i, generateMajorScaleKeys(i)))
+export const natualMajorScaleChordOption = {
+  C: generateMajorScaleChords('C', generateMajorScaleKeys('C')),
+
+  G: generateMajorScaleChords('G', generateMajorScaleKeys('G')),
+  D: generateMajorScaleChords('D', generateMajorScaleKeys('D')),
+  A: generateMajorScaleChords('A', generateMajorScaleKeys('A')),
+  E: generateMajorScaleChords('E', generateMajorScaleKeys('E')),
+  B: generateMajorScaleChords('B', generateMajorScaleKeys('B')),
+  'F♯': generateMajorScaleChords('F♯', generateMajorScaleKeys('F♯')),
+
+  F: generateMajorScaleChords('F', generateMajorScaleKeys('F')),
+  'B♭': generateMajorScaleChords('B♭', generateMajorScaleKeys('B♭')),
+  'E♭': generateMajorScaleChords('E♭', generateMajorScaleKeys('E♭')),
+  'A♭': generateMajorScaleChords('A♭', generateMajorScaleKeys('A♭')),
+  'D♭': generateMajorScaleChords('D♭', generateMajorScaleKeys('D♭')),
+  'G♭': generateMajorScaleChords('G♭', generateMajorScaleKeys('G♭'))
 }
+
+// console.log('=-========================')
+// for (const i in circleOfTheFifth) {
+//   console.log('Key:' + i)
+//   console.log(generateMajorScaleChords(i, generateMajorScaleKeys(i)))
+// }
 
 // const root = 'D'
 // const candidate = generateMajorScaleKeys(root)
