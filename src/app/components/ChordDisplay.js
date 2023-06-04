@@ -166,8 +166,13 @@ function useChord ({ speed, currChordIndex, setCurrChordIndex, pause, chordQueue
       speed = maxSpeedSec
     }
     const interval = setInterval(() => {
-      const currentChord = getRandomChord({ simpleMode: false, chordIn })
-      chordQueue.push(currentChord)
+      let nextChord = getRandomChord({ simpleMode: false, chordIn })
+      const currChord = chordQueue[safeChordIndex]
+      // prevent same chord
+      while (nextChord === currChord) {
+        nextChord = getRandomChord({ simpleMode: false, chordIn })
+      }
+      chordQueue.push(nextChord)
       if (chordQueue.length > chordQueueMaxLen) {
         chordQueue.shift()
       }
