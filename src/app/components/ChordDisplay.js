@@ -63,7 +63,7 @@ export default function ChordDisplay () {
     <div className='bg-stone-500' >
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
-      <div className='h-screen w-screen flex flex-col justify-center items-center'>
+      <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
         <div className='rounded-lg text-9xl flex items-center justify-center
                 w-[400px] h-[200px]'>
           {(chord[1] == '♯' || chord[1] == '♭')
