@@ -1,6 +1,8 @@
 # Chord Reaction Training
 
-## todo 
+Here's a chord trainer.
 
-- Chords History
-- Chords Time Machine
+## Getting Started
+https://cmajor.vercel.app/
+
+![demo](public/chord.png)
