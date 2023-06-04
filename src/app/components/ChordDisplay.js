@@ -58,9 +58,16 @@ export default function ChordDisplay () {
       {/* todo adapting to mobile device */}
       {/* Chord screen */}
       <div className='h-screen w-screen overflow-hidden flex flex-col justify-center items-center'>
-        <div className='rounded-lg text-center text-9xl
-                w-[400px] h-[160px]'>
-          {chord}
+        <div className='rounded-lg text-9xl flex items-center justify-center grow-0
+                w-[400px] h-[200px]'>
+          {(chord[1] == '♯' || chord[1] == '♭')
+            ? <div>
+              {chord[0]}
+              <span className="align-super">{chord[1]}
+              </span>
+              {chord.slice(2)}
+            </div>
+            : chord }
         </div>
         {/* Timemachine button */}
         <div className='flex mt-8 space-x-8' >
