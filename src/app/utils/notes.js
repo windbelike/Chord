@@ -148,7 +148,7 @@ const fullToneDist = 2
 const halfToneDist = 1
 
 // generate scales from a root
-function generateMajorScaleKeys (root) {
+export function generateMajorScaleKeys (root) {
   return circleOfTheFifth[root]
 }
 

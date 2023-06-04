@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AiFillCaretLeft, AiFillCaretRight, AiOutlinePause, AiOutlinePlayCircle } from 'react-icons/ai'
 import { getRandomChord } from '../utils/chordUtils'
-import { natualMajorScaleChordOption } from '../utils/notes'
+import { generateMajorScaleKeys, natualMajorScaleChordOption } from '../utils/notes'
 
 const chordQueueMaxLen = 10
 const minSpeedSec = 0.1
@@ -104,6 +104,7 @@ export default function ChordDisplay () {
           }
           <div className='m-4 w-[400px] text-lg break-words font-bold text-center'>
             {chordIn != initChordIn && 'Candidates: ' + natualMajorScaleChordOption[chordIn]}
+            {chordIn != initChordIn && '\n Keys: ' + generateMajorScaleKeys(chordIn)}
           </div>
         </div>
       </div>
