@@ -94,7 +94,7 @@ export default function ChordDisplay () {
         </div>
         {/* Chord Option Munu */}
         <div className='mt-10 flex flex-col items-center'>
-          <button className='w-[350px] text-xl hover:bg-gray-600 font-thin text-gray-300 bg-black rounded-lg p-2' onClick={onClickOpenChordMenu} >Chords In <span className='text-white font-bold'>{chordIn}</span> {chordIn == initChordIn ? 'Scale' : 'Major Natual Scale'} <span className='font-bold'>∨</span></button>
+          <button className='w-[350px] text-xl hover:bg-gray-600 font-thin text-gray-300 bg-black rounded-lg p-2' onClick={onClickOpenChordMenu} >Chords In <span className='text-white font-bold'>{chordIn}</span> {chordIn == initChordIn ? 'Scale' : 'Natual Major Scale'} <span className='font-bold'>∨</span></button>
           {openChordMenu &&
           <ul className='w-[350px] rounded-lg bg-black columns-3'>
             {chordOptionList.map(k => {
